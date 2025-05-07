@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -188,32 +189,46 @@
         .active {
             display: block;
         }
+        
+html, body {
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: auto;
+    touch-action: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+}
 
-        .chat-container {
-            flex: 1;
-            max-width: 600px;
-            margin: 50px auto 0;
-            width: 100%;
-            height: calc(100vh - 50px);
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-        }
+.chat-container {
+    flex: 1;
+    max-width: 600px;
+    margin: 50px auto 0;
+    width: 100%;
+    height: calc(100vh - 50px);
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
 
-     .chat-messages {
+.chat-messages {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
     display: flex;
+    margin-bottom: 50px;
     flex-direction: column;
     scroll-behavior: smooth;
     background-color: white;
-    margin-bottom: 60px;
     position: relative;
     margin-top: 0;
+    font-size: 16px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+    touch-action: auto;
 }
 
 .message {
@@ -225,7 +240,7 @@
     white-space: pre-wrap;
     position: relative;
     display: flex;
-    align-items: flex-start; /* This is crucial */   
+    align-items: flex-start;
     gap: 8px;
     touch-action: none;
     -webkit-user-select: none;
@@ -233,7 +248,7 @@
     user-select: none;
     touch-action: manipulation;
 }
-
+     
 .content {
     user-select: none;
     flex-grow: 1;
@@ -270,14 +285,18 @@
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    align-self: flex-start; /* Force avatar to align to top */
-    margin-top: 10px; /* Remove offset */
+    align-self: flex-start;
+    margin-top: 10px;
 }
 
 /* Sent messages should also show avatars now */
 .message.sent .avatar {
-    display: block; /* Don't hide avatars */
+    display: block;
+    order: 2; /* Move avatar to the end */
+    margin-top: 10px; /* Your specific adjustment for right-side avatars */
 }
+
+
 
 .message .avatar img {
     width: 100%;
@@ -293,6 +312,26 @@
     color: #777;
     margin-bottom: 4px;
     line-height: 1;
+}
+
+/* Received messages (left aligned) */
+.message.received {
+    align-self: flex-start;
+    margin-left: -15px;
+    flex-direction: row;
+}
+
+/* Sent messages (right aligned) */
+.message.sent {
+    align-self: flex-end;
+    margin-right: -15px;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+
+/* Content ordering for sent messages */
+.message.sent .content {
+    order: 1;
 }
 
 
@@ -311,18 +350,6 @@
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-
-        .message.received {
-            flex-direction: row;
-            align-self: flex-start;
-            margin-left: -15px;
-        }
-
-        .message.sent {
-            flex-direction: row-reverse;
-            align-self: flex-end;
-            margin-right: -15px;
-        }
 
         .message.sent .content {
             background-color: #DCF8C6;
@@ -425,72 +452,101 @@
         }
 
         .chat-input button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0 10px;
-        }
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0 10px;
+}
 
-        .chat-input button i {
-            font-size: 24px;
-            color: #4267B2;
-        }
+.chat-input button i {
+    font-size: 24px;
+    color: #888; /* Default gray when disabled */
+    transition: color 0.3s;
+}
 
-        .chat-input button:disabled i {
-            color: #888;
-        }
+.chat-input button.enabled i {
+    color: #4267B2; /* Blue when enabled */
+}
 
-        .auth-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f2f5;
-        }
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f0f2f5;
+    padding: 0 10px;
+}
 
-        .auth-box {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            text-align: center;
-        }
+.auth-box {
+    background-color: white;
+    padding: 41px 30px;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+}
 
-        .auth-box input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
+.auth-box input {
+    width: 90%;
 
-        .auth-box button {
-            width: 100%;
-            padding: 10px;
-            background-color: #4267B2;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+    height: 57px;
+    padding: 0 20px;
+    margin-bottom: 20px;
+    border: 1px solid #DADAF2;
+    background: #F8F8FB;
+    border-radius: 5px;
+    outline: none;
+    font-size: 16px;
+    transition: 0.2s ease;
+}
 
-        .auth-box button:hover {
-            background-color: #365899;
-        }
+.auth-box input:focus {
+    border-color: #626cd6;
+    background-color: #fff;
+}
 
-        .logout {
-            color: red;
-        }
+.auth-box button {
+    width: 100%;
+    height: 56px;
+    background-color: #4267B2;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 500;
+    text-transform: uppercase;
+    transition: 0.3s ease;
+    margin-top: 10px;
+}
 
-        .auth-toggle {
-            margin-top: 10px;
-        }
+.auth-box button:hover {
+    background-color: #365899;
+}
 
-        .auth-toggle a {
-            color: #4267B2;
-            text-decoration: none;
-        }
+.logout {
+    color: red;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.auth-toggle {
+    margin-top: 15px;
+}
+
+.auth-toggle a {
+    color: #4267B2;
+    text-decoration: none;
+    font-weight: 500;
+    transition: 0.3s ease;
+}
+
+.auth-toggle a:hover {
+    text-decoration: underline;
+}
+
 
         .gotopbtn {
             position: fixed;
@@ -877,129 +933,24 @@
         </div>
     </div>
 
-    <script>           
+    <script>  
     let isLogin = true;
 let users = JSON.parse(localStorage.getItem('users')) || {};
 let longPressTimer;
 let isLongPress = false;
+const badWords = ['fuck', 'nigga', 'shit', 'bitch', 'asshole'];
+const spamTracker = {};
+const SPAM_LIMIT = 5;
+const SPAM_WINDOW = 10000;
+const BAN_DURATION = 60000;
+const bannedUsers = {};
+const warnedUsers = {}; // New: Track users who have been warned
 
-// Toggle between login and signup form
-function toggleAuth() {
-    isLogin = !isLogin;
-    const authTitle = document.getElementById('auth-title');
-    const authButton = document.querySelector('.auth-box button');
-    const toggleText = document.getElementById('toggle-text');
-    const toggleLink = document.getElementById('toggle-link');
-    const errorMessage = document.getElementById('error-message');
-    const successMessage = document.getElementById('success-message');
+// Notification variables
+let lastMessageId = null;
+let notificationPermissionGranted = false;
 
-    errorMessage.style.display = 'none';
-    successMessage.style.display = 'none';
-
-    if (isLogin) {
-        authTitle.textContent = 'Login';
-        authButton.textContent = 'Login';
-        toggleText.textContent = "Don't have an account? ";
-        toggleLink.textContent = 'Sign Up';
-    } else {
-        authTitle.textContent = 'Sign Up';
-        authButton.textContent = 'Sign Up';
-        toggleText.textContent = 'Already have an account? ';
-        toggleLink.textContent = 'Login';
-    }
-}
-
-// Handle authentication (login or signup)
-async function handleAuth() {
-    const username = document.getElementById('auth-username').value.trim();
-    const password = document.getElementById('auth-password').value;
-    const loader = document.getElementById('loader');
-    const errorMessage = document.getElementById('error-message');
-    const successMessage = document.getElementById('success-message');
-
-    errorMessage.style.display = 'none';
-    successMessage.style.display = 'none';
-
-    if (!username || !password) {
-        errorMessage.textContent = 'Please enter both username and password';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
-    // Validation rules
-    if (username.length < 3 || username.length > 9) {
-        errorMessage.textContent = 'Username must be between 3 and 9 characters.';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
-    if (password.length < 4 || password.length > 20) {
-        errorMessage.textContent = 'Password must be between 4 and 20 characters.';
-        errorMessage.style.display = 'block';
-        return;
-    }
-
-    loader.style.display = 'flex';
-    await new Promise(resolve => setTimeout(resolve, 1000));
-
-    if (isLogin) {
-        if (users[username] && users[username] === password) {
-            successMessage.textContent = 'Login successful!';
-            successMessage.style.display = 'block';
-
-            localStorage.setItem('currentUser', username);
-
-            setTimeout(() => {
-                loader.style.display = 'none';
-                showContainer('chat');
-                document.querySelector('.chat-input').style.display = 'flex';
-                document.querySelector('.news-toggle').style.display = 'block';
-                updateGoTopBtn();
-            }, 500);
-        } else {
-            loader.style.display = 'none';
-            errorMessage.textContent = 'Invalid username or password';
-            errorMessage.style.display = 'block';
-        }
-    } else {
-        if (users[username]) {
-            loader.style.display = 'none';
-            errorMessage.textContent = 'Username already exists';
-            errorMessage.style.display = 'block';
-        } else {
-            users[username] = password;
-            localStorage.setItem('users', JSON.stringify(users));
-            successMessage.textContent = 'Account created successfully! Please login.';
-            successMessage.style.display = 'block';
-
-            setTimeout(() => {
-                loader.style.display = 'none';
-                toggleAuth();
-            }, 500);
-        }
-    }
-}
-
-// Ensure currentUsername is globally set after login
-document.addEventListener('DOMContentLoaded', () => {
-    const savedUser = localStorage.getItem('currentUser');
-    if (savedUser) {
-        localStorage.setItem('chat_username', savedUser);
-    }
-});
-
-  // Show chat container after successful login
-function showContainer(containerId) {
-  const containers = document.querySelectorAll('.container');
-  containers.forEach(container => {
-    container.style.display = 'none';
-  });
-  document.getElementById(containerId).style.display = 'block';
-
-  currentUsername = localStorage.getItem('chat_username') || '';
-}
-
- const elements = {
+const elements = {
   usernameInput: document.getElementById('usernameInput'),
   messageInput: document.getElementById('user-input'),
   sendButton: document.querySelector('.chat-input button'),
@@ -1010,33 +961,156 @@ function showContainer(containerId) {
 
 let replyToText = null;
 let currentUsername = localStorage.getItem('chat_username') || '';
+
 if (currentUsername && elements.usernameInput) {
   elements.usernameInput.value = currentUsername;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  loadMessages();
-  setInterval(loadMessages, 3000);
+  const savedUser = localStorage.getItem('currentUser');
+  if (savedUser) {
+    localStorage.setItem('chat_username', savedUser);
+  }
+  
+  // Request notification permission when the page loads
+  if ('Notification' in window) {
+    Notification.requestPermission().then(permission => {
+      notificationPermissionGranted = permission === 'granted';
+    });
+  }
+  
+  initializeChat();
 });
 
-if (elements.usernameInput) {
-  elements.usernameInput.addEventListener('input', (e) => {
-    currentUsername = e.target.value.trim();
-    localStorage.setItem('chat_username', currentUsername);
-  });
+function toggleAuth() {
+  isLogin = !isLogin;
+  const authTitle = document.getElementById('auth-title');
+  const authButton = document.querySelector('.auth-box button');
+  const toggleText = document.getElementById('toggle-text');
+  const toggleLink = document.getElementById('toggle-link');
+  const errorMessage = document.getElementById('error-message');
+  const successMessage = document.getElementById('success-message');
+
+  errorMessage.style.display = 'none';
+  successMessage.style.display = 'none';
+
+  if (isLogin) {
+    authTitle.textContent = 'Login';
+    authButton.textContent = 'Login';
+    toggleText.textContent = "Don't have an account? ";
+    toggleLink.textContent = 'Sign Up';
+  } else {
+    authTitle.textContent = 'Sign Up';
+    authButton.textContent = 'Sign Up';
+    toggleText.textContent = 'Already have an account? ';
+    toggleLink.textContent = 'Login';
+  }
 }
 
-elements.messageInput.addEventListener('input', () => {
-  autoResize(elements.messageInput);
-  elements.sendButton.disabled = elements.messageInput.value.trim().length === 0;
-});
+async function handleAuth() {
+  const username = document.getElementById('auth-username').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const loader = document.getElementById('loader');
+  const errorMessage = document.getElementById('error-message');
+  const successMessage = document.getElementById('success-message');
 
-elements.messageInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
+  errorMessage.style.display = 'none';
+  successMessage.style.display = 'none';
+
+  if (!username || !password) {
+    errorMessage.textContent = 'Please enter both username and password';
+    errorMessage.style.display = 'block';
+    return;
   }
-});
+
+  if (username.length < 3 || username.length > 9) {
+    errorMessage.textContent = 'Username must be between 3 and 9 characters.';
+    errorMessage.style.display = 'block';
+    return;
+  }
+
+  if (password.length < 4 || password.length > 20) {
+    errorMessage.textContent = 'Password must be between 4 and 20 characters.';
+    errorMessage.style.display = 'block';
+    return;
+  }
+
+  loader.style.display = 'flex';
+  await new Promise(resolve => setTimeout(resolve, 1000));
+
+  if (isLogin) {
+    if (users[username] && users[username] === password) {
+      successMessage.textContent = 'Login successful!';
+      successMessage.style.display = 'block';
+      localStorage.setItem('currentUser', username);
+      localStorage.setItem('chat_username', username);
+      setTimeout(() => {
+        loader.style.display = 'none';
+        showContainer('chat');
+        document.querySelector('.chat-input').style.display = 'flex';
+        document.querySelector('.news-toggle').style.display = 'block';
+        updateGoTopBtn();
+        initializeChat();
+      }, 500);
+    } else {
+      loader.style.display = 'none';
+      errorMessage.textContent = 'Invalid username or password';
+      errorMessage.style.display = 'block';
+    }
+  } else {
+    if (users[username]) {
+      loader.style.display = 'none';
+      errorMessage.textContent = 'Username already exists';
+      errorMessage.style.display = 'block';
+    } else {
+      users[username] = password;
+      localStorage.setItem('users', JSON.stringify(users));
+      successMessage.textContent = 'Account created successfully! Please login.';
+      successMessage.style.display = 'block';
+      setTimeout(() => {
+        loader.style.display = 'none';
+        toggleAuth();
+      }, 500);
+    }
+  }
+}
+function showContainer(containerId) {
+  const containers = document.querySelectorAll('.container');
+  containers.forEach(container => {
+    container.style.display = 'none';
+  });
+  document.getElementById(containerId).style.display = 'block';
+  currentUsername = localStorage.getItem('chat_username') || '';
+}
+
+function initializeChat() {
+  currentUsername = localStorage.getItem('chat_username') || '';
+
+  if (elements.usernameInput) {
+    elements.usernameInput.value = currentUsername;
+    elements.usernameInput.addEventListener('input', (e) => {
+      currentUsername = e.target.value.trim();
+      localStorage.setItem('chat_username', currentUsername);
+    });
+  }
+
+  elements.messageInput.addEventListener('input', () => {
+    autoResize(elements.messageInput);
+    const hasText = elements.messageInput.value.trim().length > 0;
+    elements.sendButton.disabled = !hasText;
+    elements.sendButton.classList.toggle('enabled', hasText);
+  });
+
+  elements.messageInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  loadMessages();
+  setInterval(loadMessages, 3000);
+}
 
 function autoResize(textarea) {
   textarea.style.height = 'auto';
@@ -1048,26 +1122,79 @@ async function loadMessages() {
     const response = await fetch('/messages');
     if (!response.ok) throw new Error('Failed to load messages');
     const data = await response.json();
+    
+    // Check for new messages to show notification
+    if (data.length > 0) {
+      const latestMessage = data[0];
+      if (latestMessage.id !== lastMessageId && 
+          latestMessage.username !== currentUsername &&
+          document.visibilityState !== 'visible') {
+        showNotification(latestMessage.username, latestMessage.content);
+      }
+      lastMessageId = latestMessage.id;
+    }
+    
     renderMessages(data);
   } catch (error) {
     showError(error.message);
   }
 }
 
-function renderMessages(messages) {
-  elements.chatContainer.innerHTML = '';
-  messages.reverse().forEach(msg => {
-    const isOwn = msg.username?.trim().toLowerCase() === currentUsername?.trim().toLowerCase();
-    displayMessage(msg.content, isOwn ? 'sent' : 'received', msg.reply_to, msg.username, msg.id);
+function showNotification(username, message) {
+  if (!notificationPermissionGranted || !('Notification' in window)) return;
+  
+  const notification = new Notification(`${username} says:`, {
+    body: message.length > 50 ? message.substring(0, 50) + '...' : message,
+    icon: 'https://i.pravatar.cc/50?u=' + encodeURIComponent(username)
   });
-  scrollToBottomIfNearBottom(elements.chatContainer);
+  
+  notification.onclick = () => {
+    window.focus();
+  };
 }
 
-function scrollToBottomIfNearBottom(container, threshold = 100) {
-  const isNearBottom = container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
-  if (isNearBottom) {
-    container.scrollTop = container.scrollHeight;
+// Store the last rendered messages to avoid unnecessary re-renders
+let lastRenderedMessages = [];
+
+function renderMessages(messages) {
+  // Check if messages are actually different from what we already have
+  if (JSON.stringify(messages) === JSON.stringify(lastRenderedMessages)) {
+    return;
   }
+  
+  // Store the current scroll position
+  const container = elements.chatContainer;
+  const wasNearBottom = isNearBottom(container);
+  const scrollPositionBefore = container.scrollTop;
+  const scrollHeightBefore = container.scrollHeight;
+  
+  // Only clear and recreate messages if necessary
+  const newMessages = messages.filter(msg => 
+    !lastRenderedMessages.some(lastMsg => lastMsg.id === msg.id)
+  );
+  
+  if (newMessages.length > 0 || messages.length !== lastRenderedMessages.length) {
+    // Only clear if we have new messages or the count changed
+    container.innerHTML = '';
+    messages.reverse().forEach(msg => {
+      const isOwn = msg.username?.trim().toLowerCase() === currentUsername?.trim().toLowerCase();
+      displayMessage(msg.content, isOwn ? 'sent' : 'received', msg.reply_to, msg.username, msg.id);
+    });
+    
+    lastRenderedMessages = [...messages];
+    
+    // Restore scroll position
+    if (wasNearBottom) {
+      container.scrollTop = container.scrollHeight;
+    } else {
+      const heightDiff = container.scrollHeight - scrollHeightBefore;
+      container.scrollTop = scrollPositionBefore + heightDiff;
+    }
+  }
+}
+
+function isNearBottom(container, threshold = 100) {
+  return container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
 }
 
 function displayMessage(text, sender, repliedTo = null, username = '', messageId = null) {
@@ -1100,8 +1227,8 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
     contentDiv.appendChild(replyBubble);
   }
 
-  const imagePattern = /(https?:\/\/[^\s]+\.(png|jpe?g|gif|webp))/gi;
-  const audioPattern = /(https?:\/\/[^\s]+\.(mp3|ogg|wav|m4a|mp4))/gi;
+  const imagePattern = /(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/gi;
+  const audioPattern = /(https?:\/\/[^\s]+\.(?:mp3|ogg|wav|m4a|mp4))/gi;
 
   const imageMatches = [...text.matchAll(imagePattern)];
   const audioMatches = [...text.matchAll(audioPattern)];
@@ -1153,14 +1280,6 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
   });
 }
 
-// === Spam Protection ===
-const spamTracker = {};
-const SPAM_LIMIT = 5; // messages
-const SPAM_WINDOW = 10000; // 10 sec
-const BAN_DURATION = 60000; // 1 minute
-const bannedUsers = {};
-
-// === Send Message ===
 async function sendMessage() {
   const content = elements.messageInput.value.trim();
   currentUsername = localStorage.getItem('chat_username') || '';
@@ -1170,10 +1289,28 @@ async function sendMessage() {
     return showError('Please enter both username and message');
   }
 
-  const now = Date.now();
+  const lowerContent = content.toLowerCase();
+  if (badWords.some(word => lowerContent.includes(word))) {
+    if (!warnedUsers[username]) {
+      warnedUsers[username] = true;
+      return showError('Warning: bad word detected! If you repeat, you will be banned.');
+    } else {
+      bannedUsers[username] = Date.now() + BAN_DURATION;
+      delete users[username];
+      localStorage.setItem('users', JSON.stringify(users));
+      localStorage.removeItem('currentUser');
+      localStorage.removeItem('chat_username');
+      showError('You used bad words again. Account deleted and banned.');
+      setTimeout(() => {
+        location.reload();
+      }, 2000);
+      return;
+    }
+  }
 
+  const now = Date.now();
   if (bannedUsers[username] && bannedUsers[username] > now) {
-    return showError(`You're banned for spamming. Wait ${Math.ceil((bannedUsers[username] - now) / 1000)}s.`);
+    return showError(`You're banned. Wait ${Math.ceil((bannedUsers[username] - now) / 1000)}s.`);
   }
 
   if (!spamTracker[username]) {
@@ -1185,36 +1322,30 @@ async function sendMessage() {
 
   if (spamTracker[username].length > SPAM_LIMIT) {
     bannedUsers[username] = now + BAN_DURATION;
-    return showError("You're banned for spamming. Try again in 1 minute.");
+    return showError("You're banned for spamming.");
   }
 
   try {
     elements.sendButton.disabled = true;
+    elements.sendButton.classList.remove('enabled');
 
-    const payload = {
-      content,
-      username,
-      reply_to: replyToText || null
-    };
-
+    const payload = { content, username, reply_to: replyToText || null };
     const response = await fetch('/messages', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-
     if (!response.ok) throw new Error('Failed to send message');
-
     displayMessage(content, 'sent', replyToText, username);
     fetchChatResponse(content);
     elements.messageInput.value = '';
     autoResize(elements.messageInput);
     clearReply();
-
   } catch (error) {
     showError(error.message);
   } finally {
-    elements.sendButton.disabled = false;
+    elements.sendButton.disabled = true;
+    elements.sendButton.classList.remove('enabled');
   }
 }
 
@@ -1239,7 +1370,6 @@ async function fetchChatResponse(userInput) {
   }
 }
 
-// Touch & Context Menu Handlers
 function handleTouchStart(e) {
   isLongPress = false;
   e.currentTarget.classList.add('no-select');
@@ -1279,6 +1409,15 @@ function clearReply() {
   }
 }
 
+// Track page visibility for notifications
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') {
+    // When page becomes visible, update lastMessageId to prevent duplicate notifications
+    if (elements.chatContainer.lastChild) {
+      lastMessageId = elements.chatContainer.lastChild.dataset.id;
+    }
+  }
+});
   function showMessageContextMenu(e, message) {  
     const messageText = message.dataset.content || '';  
     const messageId = message.dataset.id;  
@@ -1665,8 +1804,7 @@ function closeZoom() {
                 goTopBtn.style.display = 'none';
             }
         }
-
-        function logout() {
+               function logout() {
             localStorage.removeItem('currentUser');
             document.getElementById('auth-container').style.display = 'flex';
             document.querySelector('.menu').style.display = 'none';
