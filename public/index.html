@@ -4,8 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MessageMate</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta property="og:image" content="https://i.ibb.co/p6LrrNRK/1746227326721.jpg" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="MessageMate" />
@@ -190,68 +188,148 @@
         .active {
             display: block;
         }
-
-       /* Prevent scroll refresh and bounce on mobile */
-html, body {
-    overscroll-behavior: none;
-    -webkit-overflow-scrolling: auto;
-    touch-action: none;
+        
+/* Reset and base styles */
+* {
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow: hidden;
-    position: fixed;
-    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Chat container layout fix */
-.chat-container {
-    flex: 1;
-    max-width: 600px;
-    margin: 0 auto;
-    width: 100%;
+body {
+    font-family: Arial, sans-serif;
     height: 100vh;
-    background-color: white;
     display: flex;
     flex-direction: column;
+    background-color: #f5f5f5;
     position: relative;
-    overflow: hidden;
-    z-index: 1;
-    transform: translateZ(0);
-    will-change: transform;
-    contain: strict;
 }
 
-/* Message area with scroll fix */
+/* Chat container for messages */
+.chat-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: 15px;
+    padding-bottom: 80px; /* Space for fixed input */
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Fixed input container at bottom */
+.chat-input {
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    border-top: 1px solid #e0e0e0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* Text input area */
+.chat-input textarea {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 25px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    max-height: 150px;
+    color: #333;
+    background-color: #f0f0f0;
+    overflow-y: auto;
+    resize: none;
+    margin-right: 10px;
+    transition: background-color 0.2s;
+}
+
+.chat-input textarea:focus {
+    background-color: #e8e8e8;
+}
+
+/* Send button */
+.chat-input button {
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+}
+
+.chat-input button:hover {
+    background-color: #0073e6;
+}
+
+.chat-input button:active {
+    background-color: #0062cc;
+    transform: scale(0.95);
+}
+
+/* Message styling (example) */
+.message {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: 18px;
+    max-width: 80%;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+    
 .chat-messages {
     flex: 1;
     padding: 15px;
     overflow-y: auto;
     display: flex;
+    margin-bottom: 50px;
     flex-direction: column;
     scroll-behavior: smooth;
     background-color: white;
     position: relative;
+    margin-top: 0;
     font-size: 16px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
     touch-action: pan-y;
-    transform: translate3d(0, 0, 0);
-    backface-visibility: hidden;
-    will-change: transform;
-    contain: content;
     scrollbar-width: none;
+    z-index: 1000;
 }
 
-.chat-messages::-webkit-scrollbar {
-    display: none;
-}
-
-/* Message bubble */
 .message {
     padding: 10px;
     border-radius: 20px;
     margin-bottom: 8px;
+    margin: 5px 0;
     max-width: 83%;
     word-wrap: break-word;
     white-space: pre-wrap;
@@ -259,11 +337,13 @@ html, body {
     display: flex;
     align-items: flex-start;
     gap: 8px;
-    touch-action: manipulation;
+    touch-action: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
     user-select: none;
+    touch-action: manipulation;
 }
-
-/* Message content */
+     
 .content {
     user-select: none;
     flex-grow: 1;
@@ -279,76 +359,6 @@ html, body {
     background-color: #dcf8c6;
 }
 
-/* Chat input - PRESERVED your original style */
-.chat-input {
-    display: none;
-    align-items: center;
-    padding: 5px;
-    border-top: 1px solid #ddd;
-    background-color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    max-width: 600px;
-    box-sizing: border-box;
-    z-index: 1000;
-    box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1);
-}
-
-/* Chat textarea - PRESERVED your original style */
-.chat-input textarea {
-    flex: 1;
-    padding: .2rem 1.25rem;
-    border-radius: 20px;
-    border: none;
-    scrollbar-width: none;
-    align-items: center;
-    outline: none;
-    gap: 10px;
-    font-size: 17px;
-    max-height: 150px;
-    color: #333333;
-    background-color: #f2f2f2;
-    overflow-y: scroll;
-    position: relative;
-    margin-bottom: 0;
-    width: 100%;
-    border: 1px solid #f2f2f2;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    -webkit-overflow-scrolling: touch;
-}
-
-.chat-input textarea::-webkit-scrollbar {
-    display: none;
-}
-
-/* Responsive tweaks */
-@media (max-width: 768px) {
-    .chat-input {
-        padding: 8px;
-    }
-
-    .chat-input textarea {
-        font-size: 16px;
-        padding: 8px 15px;
-    }
-}
-
-/* iOS-specific fixes */
-@supports (-webkit-touch-callout: none) {
-    .chat-container {
-        height: 100vh;
-        margin-top: 0;
-    }
-}
-
-/* Android-specific fixes */
-@supports (-webkit-overflow-scrolling: touch) {
-    .chat-messages {
-        -webkit-overflow-scrolling: touch;
-    }
-}
 .reply-preview {
     font-size: 0.85em;
     color: #555;
@@ -390,7 +400,6 @@ html, body {
     display: block;
 }
 
-
 /* username styling */
 .message .username {
     font-size: 0.72rem;
@@ -403,7 +412,7 @@ html, body {
 /* reposition username for sent messages */
 .message.sent .username {
     text-align: right;  /* Align text to the right */
-    margin-right: 10px; /* Adjust margin as needed */
+    margin-right: 11px; /* Adjust margin as needed */
 }
 
 /* Received messages (left aligned) */
@@ -442,7 +451,7 @@ html, body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
-  .message video.chat-video {
+.message video.chat-video {
     width: 100%;
     margin: 6px 0 0 0;
     display: block;
@@ -456,7 +465,6 @@ html, body {
     transform: scale(1.02);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
 }
-
         .message.sent .content {
             background-color: #DCF8C6;
         }
@@ -520,7 +528,8 @@ html, body {
             outline: none;
         }
 
-
+       
+      
         .chat-input button {
     background: none;
     border: none;
@@ -1041,14 +1050,14 @@ document.addEventListener('DOMContentLoaded', () => {
   if (savedUser) {
     localStorage.setItem('chat_username', savedUser);
   }
-
+  
   // Request notification permission when the page loads
   if ('Notification' in window) {
     Notification.requestPermission().then(permission => {
       notificationPermissionGranted = permission === 'granted';
     });
   }
-
+  
   initializeChat();
 });
 
@@ -1192,7 +1201,7 @@ async function loadMessages() {
     const response = await fetch('/messages');
     if (!response.ok) throw new Error('Failed to load messages');
     const data = await response.json();
-
+    
     // Check for new messages to show notification
     if (data.length > 0) {
       const latestMessage = data[0];
@@ -1203,7 +1212,7 @@ async function loadMessages() {
       }
       lastMessageId = latestMessage.id;
     }
-
+    
     renderMessages(data);
   } catch (error) {
     showError(error.message);
@@ -1212,12 +1221,12 @@ async function loadMessages() {
 
 function showNotification(username, message) {
   if (!notificationPermissionGranted || !('Notification' in window)) return;
-
+  
   const notification = new Notification(`${username} says:`, {
     body: message.length > 50 ? message.substring(0, 50) + '...' : message,
     icon: 'https://i.pravatar.cc/50?u=' + encodeURIComponent(username)
   });
-
+  
   notification.onclick = () => {
     window.focus();
   };
@@ -1231,18 +1240,18 @@ function renderMessages(messages) {
   if (JSON.stringify(messages) === JSON.stringify(lastRenderedMessages)) {
     return;
   }
-
+  
   // Store the current scroll position
   const container = elements.chatContainer;
   const wasNearBottom = isNearBottom(container);
   const scrollPositionBefore = container.scrollTop;
   const scrollHeightBefore = container.scrollHeight;
-
+  
   // Only clear and recreate messages if necessary
   const newMessages = messages.filter(msg => 
     !lastRenderedMessages.some(lastMsg => lastMsg.id === msg.id)
   );
-
+  
   if (newMessages.length > 0 || messages.length !== lastRenderedMessages.length) {
     // Only clear if we have new messages or the count changed
     container.innerHTML = '';
@@ -1250,9 +1259,9 @@ function renderMessages(messages) {
       const isOwn = msg.username?.trim().toLowerCase() === currentUsername?.trim().toLowerCase();
       displayMessage(msg.content, isOwn ? 'sent' : 'received', msg.reply_to, msg.username, msg.id);
     });
-
+    
     lastRenderedMessages = [...messages];
-
+    
     // Restore scroll position
     if (wasNearBottom) {
       container.scrollTop = container.scrollHeight;
@@ -1298,15 +1307,13 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
   }
 
   const imagePattern = /(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/gi;
-  const audioPattern = /(https?:\/\/[^\s]+\.(?:mp3|ogg|wav|m4a))/gi;
-  const videoPattern = /(https?:\/\/[^\s]+\.(?:mp4|webm|ogg))/gi;
+  const audioPattern = /(https?:\/\/[^\s]+\.(?:mp3|ogg|wav|m4a|mp4))/gi;
 
   const imageMatches = [...text.matchAll(imagePattern)];
   const audioMatches = [...text.matchAll(audioPattern)];
-  const videoMatches = [...text.matchAll(videoPattern)];
 
   let modifiedText = text;
-  [...imageMatches, ...audioMatches, ...videoMatches].forEach(match => {
+  [...imageMatches, ...audioMatches].forEach(match => {
     modifiedText = modifiedText.replace(match[0], '');
   });
 
@@ -1329,14 +1336,6 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
     audio.controls = true;
     audio.src = match[0];
     contentDiv.appendChild(audio);
-  });
-
-  videoMatches.forEach(match => {
-    const video = document.createElement('video');
-    video.controls = true;
-    video.src = match[0];
-    video.className = 'chat-video';
-    contentDiv.appendChild(video);
   });
 
   messageBody.appendChild(contentDiv);
@@ -1797,166 +1796,18 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
-// Prevent pull-to-refresh on mobile (especially for WebIntoApp)
-let maybePreventPullToRefresh = false;
-let lastTouchY = 0;
-
-const touchStartHandler = (e) => {
-    if (e.touches.length !== 1) return;
-    lastTouchY = e.touches[0].clientY;
-    maybePreventPullToRefresh = window.pageYOffset === 0;
-};
-
-const touchMoveHandler = (e) => {
-    const touchY = e.touches[0].clientY;
-    const touchYDelta = touchY - lastTouchY;
-    lastTouchY = touchY;
-
-    if (maybePreventPullToRefresh) {
-        maybePreventPullToRefresh = false;
-        if (touchYDelta > 0) {
-            e.preventDefault(); // Block pull-to-refresh
-        }
-    }
-};
-
-document.addEventListener('touchstart', touchStartHandler, { passive: false });
-document.addEventListener('touchmove', touchMoveHandler, { passive: false });
-
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('user-input').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-
-    document.querySelector('.chat-input button').addEventListener('touchstart', function(e) {
-        e.preventDefault();
-        sendMessage();
-    });
-
-    document.getElementById('user-input').addEventListener('input', function () {
-        autoResize(this);
-        document.querySelector('.chat-input button').disabled = this.value.trim().length === 0;
-    });
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    updateGoTopBtn();
-    handleScroll();
-    populateNews();
-
-    document.querySelector('.gotopbtn').addEventListener('click', function (e) {
-        e.preventDefault();
-        document.getElementById('chat-container').scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-
-    document.getElementById('chat-container').addEventListener('scroll', handleScroll);
-
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-        document.querySelector('.news-toggle').style.display = 'block';
-    } else {
-        document.querySelector('.news-toggle').style.display = 'none';
-        document.querySelector('.news-container').style.display = 'none';
-    }
-
-    if (currentUser) {
-        showContainer('chat');
-        document.querySelector('.chat-input').style.display = 'flex';
-    }
-
-    document.getElementById('overlay').addEventListener('click', function() {
-        document.querySelectorAll('.about-container, .features-container, .help-container').forEach(container => {
-            container.style.display = 'none';
-        });
-        this.style.display = 'none';
-    });
-});
-
-function autoResize(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = (textarea.scrollHeight > 100 ? 100 : textarea.scrollHeight) + 'px';
-}
-
-function showInput() {
-    document.querySelector('.chat-input').style.display = 'flex';
-    setTimeout(() => {
-        const messages = document.querySelector('.chat-messages');
-        messages.scrollTop = messages.scrollHeight;
-    }, 100);
-}
-
-function handleScroll() {
-    const goTopBtn = document.querySelector('.gotopbtn');
-    const chatContainer = document.getElementById('chat-container');
-    if (chatContainer.scrollTop > 200) {
-        goTopBtn.style.display = 'block';
-    } else {
-        goTopBtn.style.display = 'none';
-    }
-}
-
-function updateGoTopBtn() {
-    const goTopBtn = document.querySelector('.gotopbtn');
-    const currentUser = localStorage.getItem('currentUser');
-    if (currentUser) {
-        goTopBtn.style.display = 'none';
-    } else {
-        goTopBtn.style.display = 'none';
-    }
-}
-
-function logout() {
-    localStorage.removeItem('currentUser');
-    document.getElementById('auth-container').style.display = 'flex';
-    document.querySelector('.menu').style.display = 'none';
-    document.querySelector('.chat-input').style.display = 'none';
-    document.getElementById('dropdown').style.display = 'none';
-    document.querySelector('.news-toggle').style.display = 'none';
-    document.querySelector('.news-container').style.display = 'none';
-    document.querySelectorAll('.container').forEach(container => container.classList.remove('active'));
-    updateGoTopBtn();
-}
-
-function toggleDropdown() {
-    const dropdown = document.getElementById('dropdown');
-    dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-}
-
-function showContainer(containerId) {
-    if (containerId === 'chat') {
-        const containers = document.querySelectorAll('.container');
-        containers.forEach(container => container.classList.remove('active'));
-        const selectedContainer = document.getElementById(containerId);
-        selectedContainer.classList.add('active');
-    } else {
-        document.getElementById(containerId).style.display = 'block';
-        document.getElementById('overlay').style.display = 'block';
-    }
-
-    document.getElementById('dropdown').style.display = 'none';
-    document.getElementById('auth-container').style.display = 'none';
-    document.querySelector('.menu').style.display = 'flex';
-}
-
-function hideContainer(containerId) {
-    document.getElementById(containerId).style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-}
-
 function openZoom(src) {
     document.body.style.overflow = 'hidden';
     const overlay = document.getElementById('zoom-overlay');
     const zoomImage = document.getElementById('zoom-image');
     const downloadBtn = document.getElementById('download-btn');
+
     zoomImage.src = src;
+
+    // Force download filename
     downloadBtn.href = src;
     downloadBtn.setAttribute('download', 'image.jpg');
+
     overlay.style.display = 'flex';
 }
 
@@ -1964,5 +1815,137 @@ function closeZoom() {
     document.body.style.overflow = '';
     document.getElementById('zoom-overlay').style.display = 'none';
 }
-</script>
+        document.getElementById('user-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        document.querySelector('.chat-input button').addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            sendMessage();
+        });
+
+        document.getElementById('user-input').addEventListener('input', function () {
+            autoResize(this);
+            document.querySelector('.chat-input button').disabled = this.value.trim().length === 0;
+        });
+
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight > 100 ? 100 : textarea.scrollHeight) + 'px';
+        }
+
+        document.getElementById("year").textContent = new Date().getFullYear();
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateGoTopBtn();
+            handleScroll();
+            populateNews();
+
+            document.querySelector('.gotopbtn').addEventListener('click', function (e) {
+                e.preventDefault();
+                document.getElementById('chat-container').scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            document.getElementById('chat-container').addEventListener('scroll', handleScroll);
+
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                document.querySelector('.news-toggle').style.display = 'block';
+            } else {
+                document.querySelector('.news-toggle').style.display = 'none';
+                document.querySelector('.news-container').style.display = 'none';
+            }
+        });
+
+
+        function handleScroll() {
+            const goTopBtn = document.querySelector('.gotopbtn');
+            const chatContainer = document.getElementById('chat-container');
+            if (chatContainer.scrollTop > 200) {
+                goTopBtn.style.display = 'block';
+            } else {
+                goTopBtn.style.display = 'none';
+            }
+        }
+
+        function updateGoTopBtn() {
+            const goTopBtn = document.querySelector('.gotopbtn');
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                goTopBtn.style.display = 'none';
+            } else {
+                goTopBtn.style.display = 'none';
+            }
+        }
+               function logout() {
+            localStorage.removeItem('currentUser');
+            document.getElementById('auth-container').style.display = 'flex';
+            document.querySelector('.menu').style.display = 'none';
+            document.querySelector('.chat-input').style.display = 'none';
+            document.getElementById('dropdown').style.display = 'none';
+            document.querySelector('.news-toggle').style.display = 'none';
+            document.querySelector('.news-container').style.display = 'none';
+            document.querySelectorAll('.container').forEach(container => container.classList.remove('active'));
+            updateGoTopBtn();
+        }
+
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        }
+
+        function showContainer(containerId) {
+            if (containerId === 'chat') {
+                const containers = document.querySelectorAll('.container');
+                containers.forEach(container => container.classList.remove('active'));
+                const selectedContainer = document.getElementById(containerId);
+                selectedContainer.classList.add('active');
+            } else {
+                document.getElementById(containerId).style.display = 'block';
+                document.getElementById('overlay').style.display = 'block';
+            }
+
+            document.getElementById('dropdown').style.display = 'none';
+            document.getElementById('auth-container').style.display = 'none';
+            document.querySelector('.menu').style.display = 'flex';
+        }
+
+        function hideContainer(containerId) {
+            document.getElementById(containerId).style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+        }
+
+    function openZoom(src) {
+    document.body.style.overflow = 'hidden';
+    const overlay = document.getElementById('zoom-overlay');
+    const zoomImage = document.getElementById('zoom-image');
+    zoomImage.src = src;
+    overlay.style.display = 'flex';
+}
+
+function closeZoom() {
+    document.body.style.overflow = '';
+    document.getElementById('zoom-overlay').style.display = 'none';
+}
+
+        document.getElementById('overlay').addEventListener('click', function() {
+            document.querySelectorAll('.about-container, .features-container, .help-container').forEach(container => {
+                container.style.display = 'none';
+            });
+            this.style.display = 'none';
+        });
+
+        const currentUser = localStorage.getItem('currentUser');
+        if (currentUser) {
+            showContainer('chat');
+            document.querySelector('.chat-input').style.display = 'flex';
+        }
+
+    </script>
 </html>
