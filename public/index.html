@@ -1226,6 +1226,29 @@ function renderMessages(messages) {
 function isNearBottom(container, threshold = 100) {
   return container.scrollHeight - container.scrollTop - container.clientHeight < threshold;
 }
+  // Prevent pull-to-refresh on Android WebView
+  let maybePreventPullToRefresh = false;
+  let lastTouchY = 0;
+  const touchSlop = 10;
+
+  document.addEventListener("touchstart", function (e) {
+    if (e.touches.length !== 1) return;
+    lastTouchY = e.touches[0].clientY;
+    maybePreventPullToRefresh = window.scrollY === 0;
+  }, { passive: false });
+
+  document.addEventListener("touchmove", function (e) {
+    const touchY = e.touches[0].clientY;
+    const touchYDelta = touchY - lastTouchY;
+    lastTouchY = touchY;
+
+    if (maybePreventPullToRefresh) {
+      maybePreventPullToRefresh = false;
+      if (touchYDelta > 0) {
+        e.preventDefault(); // Prevent pull down
+      }
+    }
+  }, { passive: false });
 
 function displayMessage(text, sender, repliedTo = null, username = '', messageId = null) {
   const messageDiv = document.createElement('div');
