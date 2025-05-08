@@ -1281,13 +1281,15 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
   }
 
   const imagePattern = /(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/gi;
-  const audioPattern = /(https?:\/\/[^\s]+\.(?:mp3|ogg|wav|m4a|mp4))/gi;
+  const audioPattern = /(https?:\/\/[^\s]+\.(?:mp3|ogg|wav|m4a))/gi;
+  const videoPattern = /(https?:\/\/[^\s]+\.(?:mp4|webm|ogg))/gi;
 
   const imageMatches = [...text.matchAll(imagePattern)];
   const audioMatches = [...text.matchAll(audioPattern)];
+  const videoMatches = [...text.matchAll(videoPattern)];
 
   let modifiedText = text;
-  [...imageMatches, ...audioMatches].forEach(match => {
+  [...imageMatches, ...audioMatches, ...videoMatches].forEach(match => {
     modifiedText = modifiedText.replace(match[0], '');
   });
 
@@ -1310,6 +1312,14 @@ function displayMessage(text, sender, repliedTo = null, username = '', messageId
     audio.controls = true;
     audio.src = match[0];
     contentDiv.appendChild(audio);
+  });
+
+  videoMatches.forEach(match => {
+    const video = document.createElement('video');
+    video.controls = true;
+    video.src = match[0];
+    video.className = 'chat-video';
+    contentDiv.appendChild(video);
   });
 
   messageBody.appendChild(contentDiv);
